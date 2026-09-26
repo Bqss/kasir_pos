@@ -80,14 +80,14 @@ const AddMerkModal: React.FC<AddMerkModalProps> = ({
 const createStyles = (colorScheme: "light" | "dark") =>
   StyleSheet.create({
     root: {
-      ...StyleSheet.absoluteFillObject,
+      ...StyleSheet.absoluteFill,
       justifyContent: "center",
       alignItems: "center",
       flexDirection: "column",
       zIndex: 20,
     },
     backdrop: {
-      ...StyleSheet.absoluteFillObject,
+      ...StyleSheet.absoluteFill,
       backgroundColor: "rgba(0,0,0,0.45)",
     },
     centerWrapper: {

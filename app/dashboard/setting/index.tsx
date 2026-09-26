@@ -151,7 +151,7 @@ export default function SettingScreen() {
               showTopBorder={false}
               showBottomBorder={true}
             />
-            {userRole === 'owner' && (
+            {['owner', 'admin', 'superadmin'].includes(userRole || '') && (
               <>
                 <SettingListItem
                   leftIconName="storefront-outline"

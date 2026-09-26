@@ -1,32 +1,46 @@
-import { UserRole, canAccessRole, hasPermission } from '@/config/permissions';
+import { UserRole, canAccessRole, hasPermission, normalizeRole } from '@/config/permissions';
+import { useUserStore } from '@/stores/user-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export function usePermissions() {
-  const [userRole, setUserRole] = useState<UserRole | null>(null);
+  const user = useUserStore((state) => state.user);
+  const [storedRole, setStoredRole] = useState<UserRole | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadUserRole();
-  }, []);
-
-  const loadUserRole = async () => {
+  const loadUserRole = useCallback(async () => {
     try {
-      const role = await AsyncStorage.getItem('user_role');
-      if (role && ['owner', 'manager', 'cashier'].includes(role)) {
-        setUserRole(role as UserRole);
+      if (user?.role) {
+        const norm = normalizeRole(user.role);
+        setStoredRole(norm);
+        await AsyncStorage.setItem('user_role', norm);
+      } else {
+        const role = await AsyncStorage.getItem('user_role');
+        if (role) {
+          setStoredRole(normalizeRole(role));
+        } else {
+          setStoredRole(normalizeRole(user?.role));
+        }
       }
     } catch (error) {
       console.error('Error loading user role:', error);
+      setStoredRole(normalizeRole(user?.role));
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    loadUserRole();
+  }, [loadUserRole]);
+
+  const activeRole: UserRole = storedRole || normalizeRole(user?.role);
 
   const saveUserRole = async (role: UserRole) => {
     try {
-      await AsyncStorage.setItem('user_role', role);
-      setUserRole(role);
+      const norm = normalizeRole(role);
+      await AsyncStorage.setItem('user_role', norm);
+      setStoredRole(norm);
     } catch (error) {
       console.error('Error saving user role:', error);
     }
@@ -35,24 +49,28 @@ export function usePermissions() {
   const clearUserRole = async () => {
     try {
       await AsyncStorage.removeItem('user_role');
-      setUserRole(null);
+      setStoredRole(null);
     } catch (error) {
       console.error('Error clearing user role:', error);
     }
   };
 
-  const checkPermission = (menuKey: string): boolean => {
-    if (!userRole) return false;
-    return hasPermission(userRole, menuKey);
-  };
+  const checkPermission = useCallback(
+    (menuKey: string): boolean => {
+      return hasPermission(activeRole, menuKey);
+    },
+    [activeRole]
+  );
 
-  const checkRoleAccess = (requiredRole: UserRole): boolean => {
-    if (!userRole) return false;
-    return canAccessRole(requiredRole, userRole);
-  };
+  const checkRoleAccess = useCallback(
+    (requiredRole: UserRole): boolean => {
+      return canAccessRole(requiredRole, activeRole);
+    },
+    [activeRole]
+  );
 
   return {
-    userRole,
+    userRole: activeRole,
     loading,
     saveUserRole,
     clearUserRole,
@@ -63,7 +81,7 @@ export function usePermissions() {
 
 export function usePermission(menuKey: string) {
   const { hasPermission, loading } = usePermissions();
-  const [permitted, setPermitted] = useState(false);
+  const [permitted, setPermitted] = useState(true);
 
   useEffect(() => {
     if (!loading) {
@@ -73,3 +91,4 @@ export function usePermission(menuKey: string) {
 
   return { permitted, loading };
 }
+

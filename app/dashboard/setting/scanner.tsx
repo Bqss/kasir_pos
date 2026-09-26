@@ -10,8 +10,7 @@ import { useScannerDevice } from "@/hooks/use-scanner-device";
 import { useUserPlan } from "@/hooks/use-user-plan";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNavigation } from "@react-navigation/native";
-import { useRouter } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import React from "react";
 import { ActivityIndicator, Alert, Image, StyleSheet, TouchableOpacity, useWindowDimensions, View } from "react-native";
 

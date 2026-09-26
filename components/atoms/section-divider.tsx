@@ -1,5 +1,6 @@
 import { Colors } from "@/constants/theme";
-import { StyleSheet, useColorScheme, useWindowDimensions, View } from "react-native";
+import { useColorScheme } from "@/hooks/use-color-scheme";
+import { StyleSheet, useWindowDimensions, View } from "react-native";
 
 const SectionDivider = () => {
     const colorScheme = useColorScheme() ?? "light";

@@ -474,7 +474,7 @@ const createStyles = (
       alignItems: "center",
     },
     backdrop: {
-      ...StyleSheet.absoluteFillObject,
+      ...StyleSheet.absoluteFill,
     },
     modalCard: {
       width: isTablet ? "70%" : "86%",

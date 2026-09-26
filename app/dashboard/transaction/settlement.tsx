@@ -13,14 +13,15 @@ import { Transaction } from "@/types/api";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Alert, ScrollView, Share, StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from "react-native";
+import { Alert, Platform, ScrollView, Share, StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from "react-native";
 
-// Lazy import BluetoothManager to avoid crash when native module is not linked
 let BluetoothManager: any = null;
-try {
-  BluetoothManager = require("@vardrz/react-native-bluetooth-escpos-printer").BluetoothManager;
-} catch (e) {
-  console.warn("[settlement] BluetoothManager not available:", e);
+if (Platform.OS !== "web" && typeof window !== "undefined") {
+  try {
+    BluetoothManager = require("@vardrz/react-native-bluetooth-escpos-printer").BluetoothManager;
+  } catch (e) {
+    console.warn("[settlement] BluetoothManager not available:", e);
+  }
 }
 
 type TransactionResult = Transaction;

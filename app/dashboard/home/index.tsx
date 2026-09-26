@@ -160,18 +160,16 @@ const DashboardScreen = () => {
         showHelp={false}
         title="Beranda"
         left={
-          !isPhone ? (
-            <TouchableOpacity
-              onPress={openDrawer}
-              style={styles.headerIconButton}
-            >
-              <Ionicons
-                name="menu-outline"
-                size={isTablet ? 36 : 24}
-                color="white"
-              />
-            </TouchableOpacity>
-          ) : undefined
+          <TouchableOpacity
+            onPress={openDrawer}
+            style={styles.headerIconButton}
+          >
+            <Ionicons
+              name="menu-outline"
+              size={isTablet ? 36 : 24}
+              color="white"
+            />
+          </TouchableOpacity>
         }
         right={
           <TouchableOpacity
@@ -385,17 +383,71 @@ const DashboardScreen = () => {
             </ScrollView>
           </View>
           <View style={styles.quickActionRow}>
+            {hasPermission('transaction') && (
+              <MenuItem
+                label="Transaksi"
+                icon="swap-horizontal-outline"
+                onPress={() => {
+                  router.push("/dashboard/transaction" as never);
+                }}
+              />
+            )}
+            {hasPermission('reports') && (
+              <MenuItem
+                label="Riwayat"
+                icon="receipt-outline"
+                onPress={() => {
+                  router.push("/dashboard/transaction/history" as never);
+                }}
+              />
+            )}
+            {hasPermission('reports') && (
+              <MenuItem
+                label="Laporan"
+                icon="bar-chart-outline"
+                onPress={() => {
+                  router.push("/dashboard/home/report" as never);
+                }}
+              />
+            )}
             {hasPermission('products') && (
               <MenuItem
                 label="Kelola Produk"
-                icon="bag-outline"
+                icon="bag-handle-outline"
                 onPress={() => {
                   router.push("/dashboard/product/manage" as never);
                 }}
               />
             )}
+            {hasPermission('categories') && (
+              <MenuItem
+                label="Kategori"
+                icon="grid-outline"
+                onPress={() => {
+                  router.push("/dashboard/category/manage" as never);
+                }}
+              />
+            )}
+            {hasPermission('customers') && (
+              <MenuItem
+                label="Pelanggan"
+                icon="people-outline"
+                onPress={() => {
+                  router.push("/dashboard/customer/manage" as never);
+                }}
+              />
+            )}
+            {hasPermission('suppliers') && (
+              <MenuItem
+                label="Supplier"
+                icon="bus-outline"
+                onPress={() => {
+                  router.push("/dashboard/supplier/manage" as never);
+                }}
+              />
+            )}
             <MenuItem
-              label="Perputaran Stock"
+              label="Stok History"
               icon="sync-outline"
               onPress={() => {
                 router.push("/dashboard/stock-history" as never);
@@ -422,13 +474,6 @@ const DashboardScreen = () => {
               />
             )}
             <MenuItem
-              label="Bantuan"
-              icon="help-circle-outline"
-              onPress={() => {
-                router.push("/dashboard/help" as never);
-              }}
-            />
-            <MenuItem
               label="Profil"
               icon="person-circle-outline"
               onPress={() => {
@@ -444,6 +489,13 @@ const DashboardScreen = () => {
                 }}
               />
             )}
+            <MenuItem
+              label="Bantuan"
+              icon="help-circle-outline"
+              onPress={() => {
+                router.push("/dashboard/help" as never);
+              }}
+            />
           </View>
 
           <View style={styles.sectionCard}>
@@ -469,14 +521,12 @@ const DashboardScreen = () => {
         </View>
       )}
 
-      {!isPhone && (
-        <Sidebar
-          activeKey={activeMenu}
-          isOpen={isDrawerOpen}
-          onClose={closeDrawer}
-          onSelect={key => setActiveMenu(key as DashboardMenuKey)}
-        />
-      )}
+      <Sidebar
+        activeKey={activeMenu}
+        isOpen={isDrawerOpen}
+        onClose={closeDrawer}
+        onSelect={key => setActiveMenu(key as DashboardMenuKey)}
+      />
     </View>
   );
 };
@@ -724,7 +774,7 @@ const createStyles = (
       fontWeight: "600",
     },
     drawerOverlay: {
-      ...StyleSheet.absoluteFillObject,
+      ...StyleSheet.absoluteFill,
       flexDirection: "row",
       backgroundColor: "rgba(0,0,0,0.3)",
       zIndex: 3,

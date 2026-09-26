@@ -88,7 +88,7 @@ export default function AddBarcodeScreen() {
       <View style={styles.scannerContainer}>
         {hasPermission === "granted" && !scanned ? (
           <CameraView
-            style={StyleSheet.absoluteFillObject}
+            style={StyleSheet.absoluteFill}
             facing="back"
             onBarcodeScanned={handleBarCodeScanned}
           />
@@ -146,7 +146,7 @@ const createStyles = (colorScheme: "light" | "dark", isTablet: boolean, isTablet
       overflow: "hidden",
     },
     overlay: {
-      ...StyleSheet.absoluteFillObject,
+      ...StyleSheet.absoluteFill,
       justifyContent: "center",
       alignItems: "center",
       flexDirection: "column",

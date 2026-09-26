@@ -1,6 +1,7 @@
 import { Colors } from "@/constants/theme";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, useColorScheme, useWindowDimensions, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from "react-native";
 
 type ProductItemProps = {
     name: string;

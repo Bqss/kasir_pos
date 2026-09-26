@@ -18,6 +18,7 @@ import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -26,12 +27,13 @@ import {
   View,
 } from "react-native";
 
-// Lazy import BluetoothManager to avoid crash when native module is not linked
 let BluetoothManager: any = null;
-try {
-  BluetoothManager = require("@vardrz/react-native-bluetooth-escpos-printer").BluetoothManager;
-} catch (e) {
-  console.warn("[show] BluetoothManager not available:", e);
+if (Platform.OS !== "web" && typeof window !== "undefined") {
+  try {
+    BluetoothManager = require("@vardrz/react-native-bluetooth-escpos-printer").BluetoothManager;
+  } catch (e) {
+    console.warn("[show] BluetoothManager not available:", e);
+  }
 }
 
 export default function TransactionDetailPage() {

@@ -11,7 +11,7 @@ import { APP_EVENTS, appEvents } from "./event-emitter";
 // Untuk akses service di laptop dari Android Emulator, gunakan 10.0.2.2
 // const API_URL = process.env.API_URL || "http://10.0.2.2:3001";
 // const API_URL = process.env.API_URL || "http://192.168.1.5:3001";
-const API_URL = process.env.API_URL || "https://pos-be.basofi.my.id";
+const API_URL = process.env.EXPO_PUBLIC_API_URL || process.env.API_URL || "http://localhost:3001";
 
 console.log("🔧 API Configuration:", { API_URL });
 
@@ -52,14 +52,16 @@ class ApiService {
         }
 
         // Tambahkan branch_id ke header untuk filter outlet
-        try {
-          const branchId = await AsyncStorage.getItem("current_branch_id");
-          console.log("🔧 Branch ID:", branchId);
-          if (branchId && config.headers) {
-            config.headers["branch_id"] = branchId;
+        if (typeof window !== "undefined") {
+          try {
+            const branchId = await AsyncStorage.getItem("current_branch_id");
+            console.log("🔧 Branch ID:", branchId);
+            if (branchId && config.headers) {
+              config.headers["branch_id"] = branchId;
+            }
+          } catch (error) {
+            // Ignore error loading branch_id
           }
-        } catch (error) {
-          // Ignore error loading branch_id
         }
 
         console.log(
@@ -110,6 +112,7 @@ class ApiService {
    * Load token from AsyncStorage
    */
   private async loadToken() {
+    if (typeof window === "undefined") return;
     try {
       const token = await AsyncStorage.getItem("auth_token");
       if (token) {

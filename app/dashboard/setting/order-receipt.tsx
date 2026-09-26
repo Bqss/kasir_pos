@@ -78,10 +78,10 @@ export default function OrderReceiptSettingScreen() {
       if (response.data) {
         const config = response.data;
         setStruckConfig(config);
-        setDisplayRunningNumbers(config.display_running_numbers ?? true);
+        setDisplayRunningNumbers(config.display_running_number ?? true);
         setDisplayUnitNextToQty(config.display_unit_next_to_qty ?? true);
         setShowTransactionNote(config.display_transaction_note ?? true);
-        setDisplayQuantityTotal(config.display_quantity_total ?? true);
+        setDisplayQuantityTotal((config as any).display_quantity_total ?? true);
         setHideTaxPercentage(config.hide_tax_percentage ?? false);
         setHeaderDesc(config.header_description || "");
         setFooterDesc(config.footer_description || "");

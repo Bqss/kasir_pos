@@ -6,8 +6,7 @@ import { Colors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { usePrinterDevice } from "@/hooks/use-printer-device";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import { useRouter } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import React from "react";
 import { ActivityIndicator, Alert, Image, StyleSheet, TouchableOpacity, useWindowDimensions, View } from "react-native";
 

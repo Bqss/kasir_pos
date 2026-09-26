@@ -2,12 +2,16 @@ import { StoreInfo, StruckConfig } from "@/services";
 import { Transaction } from "@/types/api";
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
+import { Platform } from "react-native";
+
 // Lazy import BluetoothEscposPrinter to avoid crash when native module is not linked
 let BluetoothEscposPrinter: any = null;
-try {
-    BluetoothEscposPrinter = require("@vardrz/react-native-bluetooth-escpos-printer").BluetoothEscposPrinter;
-} catch (e) {
-    console.warn("[receipt] BluetoothEscposPrinter not available:", e);
+if (Platform.OS !== "web" && typeof window !== "undefined") {
+    try {
+        BluetoothEscposPrinter = require("@vardrz/react-native-bluetooth-escpos-printer").BluetoothEscposPrinter;
+    } catch (e) {
+        console.warn("[receipt] BluetoothEscposPrinter not available:", e);
+    }
 }
 
 // Function to convert image URL to base64

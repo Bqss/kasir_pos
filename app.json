@@ -67,7 +67,11 @@
       ],
       "expo-font",
       "expo-web-browser",
-      "with-rn-bluetooth-classic"
+      "with-rn-bluetooth-classic",
+      "@react-native-community/datetimepicker",
+      "expo-image",
+      "expo-sharing",
+      "expo-status-bar"
     ],
     "experiments": {
       "typedRoutes": true,

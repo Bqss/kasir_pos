@@ -80,6 +80,7 @@ export const useBranchStore = create<BranchStore>((set) => ({
     },
 
     loadFromStorage: async () => {
+        if (typeof window === "undefined") return;
         try {
             set({ isLoading: true });
 
