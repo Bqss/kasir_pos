@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AppState, AppStateStatus } from 'react-native';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import { authApi } from '../services';
+import { authApi } from '../services/endpoints/auth';
 import { User } from '../types/api';
 
 // Module-level variables to track intervals and subscriptions

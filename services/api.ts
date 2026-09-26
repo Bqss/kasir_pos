@@ -7,11 +7,27 @@ import axios, {
 import { ApiError, ApiResponse } from "../types/api";
 import { APP_EVENTS, appEvents } from "./event-emitter";
 
-// Baca dari environment variable, fallback ke localhost jika tidak ada
-// Untuk akses service di laptop dari Android Emulator, gunakan 10.0.2.2
-// const API_URL = process.env.API_URL || "http://10.0.2.2:3001";
-// const API_URL = process.env.API_URL || "http://192.168.1.5:3001";
-const API_URL = process.env.EXPO_PUBLIC_API_URL || process.env.API_URL || "http://localhost:3001";
+import Constants from 'expo-constants';
+
+const getApiUrl = (): string => {
+  const envUrl = process.env.EXPO_PUBLIC_API_URL || process.env.API_URL;
+  if (envUrl && !envUrl.includes('localhost') && !envUrl.includes('127.0.0.1')) {
+    return envUrl;
+  }
+
+  // Auto-detect host IP when running via Expo on a physical mobile device / emulator
+  const hostUri = Constants.expoConfig?.hostUri || (Constants as any).manifest2?.extra?.expoGo?.debuggerHost;
+  if (hostUri) {
+    const ip = hostUri.split(':')[0];
+    if (ip && ip !== 'localhost' && ip !== '127.0.0.1') {
+      return `http://${ip}:3001`;
+    }
+  }
+
+  return envUrl || "http://localhost:3001";
+};
+
+const API_URL = getApiUrl();
 
 console.log("🔧 API Configuration:", { API_URL });
 
